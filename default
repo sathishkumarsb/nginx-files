@@ -1,0 +1,27 @@
+server {
+    listen 80 default_server;
+    listen [::]:80 default_server;
+    root /var/www/html;
+    index index.php index.html index.htm index.nginx-debian.html;
+    server_name 167.99.241.212;
+    location /doocti-report {
+          try_files $uri $uri/ /doocti-report/index.html;
+    }
+
+      location /doocti-report/ {
+    try_files $uri $uri/ @rewrites;
+  }
+
+  location @rewrites {
+    rewrite ^(.+)$ /doocti-report/index.html last;
+  }
+
+
+    location ~ \.php$ {
+        include snippets/fastcgi-php.conf;
+        fastcgi_pass unix:/run/php/php7.1-fpm.sock;
+    }
+    location ~ /\.ht {
+        deny all;
+    }
+}
